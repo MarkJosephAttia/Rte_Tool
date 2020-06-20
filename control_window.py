@@ -14,7 +14,7 @@ class Controller:
         self. x =0
         # pass
         # self.login = login()
-        toolName = "Córdoba Studio RTE"
+        toolName = "Córdoba RTE Studio"
         toolIcon = ':/images/FOE.png'
         self.create_window = createWindow(toolName, toolIcon)
         self.openExitWindow = openExitProject(toolName, toolIcon)
