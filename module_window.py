@@ -1,218 +1,180 @@
-from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtCore import QSize
+import os
 
+from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import QSize, QDir, QFile
+from PyQt5.QtGui import *
 from images import *
 from PyQt5.QtWidgets import *
-from PyQt5.Qt import *
-from PyQt5.QtGui import QFont, QColor, QIcon
-import copy
 
-class StandardItem(QStandardItem):
-    def __init__(self, txt='', font_size=12, set_bold=False, color=QColor(0, 0, 0)):
-        super().__init__()
 
-        fnt = QFont('Open Sans', font_size)
-        fnt.setBold(set_bold)
-        self.setEditable(False)
-        self.setForeground(color)
-        self.setFont(fnt)
-        self.setText(txt)
 
-class moduleConfg(QMainWindow):
+class moduleWindow(QtWidgets.QMdiSubWindow):
     switch_window = QtCore.pyqtSignal()
-    x = 0
-    listCheckModules = []
-    listCheckModules1 = []
+    osCheck = ""
+    swcsCheck = ""
+    dataTypeCheck = ""
 
-    def __init__(self, toolName, toolIcon):
-        super(moduleConfg, self).__init__()
-        self.setGeometry(80, 80, 950, 600)
+
+    def __init__(self,toolName,toolIcon):
+        super(moduleWindow, self).__init__()
+        self.setGeometry(400, 150, 550, 350)
         self.setWindowTitle(toolName)
         self.setWindowIcon(QtGui.QIcon(toolIcon))
+        self.initui()
 
-        self.selectedItemPath = None
-        self.selectedContainer = None
-        self.clickedData = None
-        self.selectedItemType = None
-        self.selectedContainerContList = None
-        self.selectedContainerContListPath = None
+    def initui(self):
+        self.OSlabel = QtWidgets.QLabel(self)
+        self.OSlabel.setText("OS")
+        self.OSlabel.move(5, 10)
+        self.OSlabel.resize(80, 30)
+        self.OSlabel.setFont(QtGui.QFont("Sanserif", 15))
 
-        self.parametersAndReferences = QScrollArea(self)
-        self.parametersAndReferences.setWidgetResizable(True)
-        self.parametersAndReferences.setGeometry(500, 70, 850, 500)
-        self.parametersAndReferencesRows = QFormLayout()
-        groupBox = QGroupBox("Parameters")
-        groupBox.setLayout(self.parametersAndReferencesRows)
-        self.parametersAndReferences.setWidget(groupBox)
+        self.osTextBox = QLineEdit(self)
+        self.osTextBox.setPlaceholderText("Please Enter The Name")
+        self.osTextBox.move(105, 10)
+        self.osTextBox.resize(200, 30)
+        self.osTextBox.setToolTip('This is an example button')
 
-        # Create the View
-        self.checkedModulesView = QTreeView(self)
-        # show header
-        self.checkedModulesView.setHeaderHidden(True)
-        self.checkedModulesView.setGeometry(20, 70, 450, 500)
+        self.osButton = QtWidgets.QPushButton(self)
+        self.osButton.setText("Choose Folder")
+        self.osButton.move(330, 10)
+        self.osButton.resize(100, 30)
+        self.osButton.setFont(QtGui.QFont("Sanserif", 10))
+        self.osButton.setToolTip('This is an example button')
+        self.osButton.clicked.connect(self.selectOSFile)
 
-        self.checkedModulesTree = QStandardItemModel()
-        # root of tree
-        self.rootNode = self.checkedModulesTree.invisibleRootItem()
+        self.comlabel = QtWidgets.QLabel(self)
+        self.comlabel.setText("Com")
+        self.comlabel.move(5, 50)
+        self.comlabel.resize(80, 30)
+        self.comlabel.setFont(QtGui.QFont("Sanserif", 13))
 
-        self.moduleRoot = StandardItem('Modules', 10)
+        self.comTextBox = QLineEdit(self)
+        self.comTextBox.setPlaceholderText("Please Choose The Folder")
+        self.comTextBox.move(105, 50)
+        self.comTextBox.resize(200, 30)
+        self.comTextBox.setToolTip('This is an example button')
 
-        #self.checkedModulesView.clicked.connect(self.saveParameters)
-        #self.checkedModulesView.clicked.connect(self.getValue)
-        #self.checkedModulesView.clicked.connect(self.showParamters)
+        self.comButton = QtWidgets.QPushButton(self)
+        self.comButton.setText("Choose File")
+        self.comButton.move(330, 50)
+        self.comButton.resize(100, 30)
+        self.comButton.setFont(QtGui.QFont("Sanserif", 10))
+        self.comButton.setToolTip('This is an example button')
+        self.comButton.clicked.connect(self.sellectComFile)
 
-        #self.checkedModulesView.clicked.connect(self.showDescription)
-        #self.checkedModulesView.clicked.connect(self.showMultiplicity)
+        self.swcslabel = QtWidgets.QLabel(self)
+        self.swcslabel.setText("SwCs")
+        self.swcslabel.move(5, 90)
+        self.swcslabel.resize(80, 30)
+        self.swcslabel.setFont(QtGui.QFont("Sanserif", 13))
 
-        self.descriptionLabel = QtWidgets.QPlainTextEdit(self)
-        self.descriptionLabel.appendPlainText("description information Label")
-        self.descriptionLabel.setGeometry(20, 580, 450, 120)
-        self.descriptionLabel.setFont(QtGui.QFont("Sanserif", 10))
-        self.descriptionLabel.setStyleSheet("""QLabel {border: 1px solid #000;}""")
-        self.descriptionLabel.setReadOnly(True)
+        self.swcsTextBox = QPlainTextEdit(self)
+        self.swcsTextBox.setPlaceholderText("Please Choose The Folder")
+        self.swcsTextBox.setGeometry(105, 90, 200, 60)
+        self.swcsTextBox.setToolTip('This is an example button')
 
-        self.containerMultiplicityLabel = QtWidgets.QPlainTextEdit(self)
-        self.containerMultiplicityLabel.appendPlainText("Container Multiplicity Label")
-        self.containerMultiplicityLabel.setGeometry(500, 580, 350, 120)
-        self.containerMultiplicityLabel.setFont(QtGui.QFont("Sanserif", 10))
-        self.containerMultiplicityLabel.setStyleSheet("""QLabel {border: 1px solid #000;}""")
-        self.containerMultiplicityLabel.setReadOnly(True)
+        self.swcsButton = QtWidgets.QPushButton(self)
+        self.swcsButton.setText("Choose File")
+        self.swcsButton.setGeometry(330, 90, 100, 30)
+        self.swcsButton.setFont(QtGui.QFont("Sanserif", 10))
+        self.swcsButton.setToolTip('This is an example button')
+        self.swcsButton.clicked.connect(self.sellectSwCsFile)
 
-        # buttons
-        self.saveButton = QtWidgets.QPushButton(self)
-        self.saveButton.setText("Save")
-        self.saveButton.move(1100, 620)
-        self.saveButton.resize(90, 60)
-        # self.saveButton.setFont(QtGui.QFont("Sanserif", 15))
-        self.saveButton.setToolTip('This is an example button')
-        self.saveButton.setStyleSheet("QPushButton:hover:!pressed"
-                                      "{background-color: rgba(0,0,255,0.8);"
-                                      "border:4px solid #000;"
-                                      "border-width: 2px;"
-                                      "border-color: black;"
-                                      "border-radius: 10px;"
-                                      "font: 18px;}"
-                                      "QPushButton:!hover:!pressed"
-                                      "{background-color: rgba(0,0,255,1);"
-                                      "color:white;"
-                                      "border:4px solid #000;"
-                                      "border-width: 2px;"
-                                      "border-color: black;"
-                                      "border-radius: 10px;"
-                                      "font: bold 16px;}"
-                                      "QPushButton:pressed"
-                                      "{background-color: rgba(0,0,255,0.5);"
-                                      "border:4px solid #000;"
-                                      "border-width: 1px;"
-                                      "border-color: grey;"
-                                      "border-radius: 10px;"
-                                      "font: bold 16px;}")
+        self.dataTypeslabel = QtWidgets.QLabel(self)
+        self.dataTypeslabel.setText("Data Types")
+        self.dataTypeslabel.move(5, 160)
+        self.dataTypeslabel.resize(90, 30)
+        self.dataTypeslabel.setFont(QtGui.QFont("Sanserif", 13))
 
-        #self.saveButton.clicked.connect(self.saveButtonFunction)
+        self.dataTypesTextBox = QPlainTextEdit(self)
+        self.dataTypesTextBox.setPlaceholderText("Please Choose The Folder")
+        self.dataTypesTextBox.setGeometry(105, 160, 200, 60)
+        self.dataTypesTextBox.setToolTip('This is an example button')
 
-        self.generateButton = QtWidgets.QPushButton(self)
-        self.generateButton.setText("Generate")
-        self.generateButton.move(1200, 620)
-        self.generateButton.resize(90, 60)
-        # self.generateButton.setFont(QtGui.QFont("Sanserif", 12))
-        self.generateButton.setToolTip('This is an example button')
-        self.generateButton.setStyleSheet("QPushButton:hover:!pressed"
-                                          "{background-color: rgba(255,0,0,0.8);"
-                                          "border:4px solid #000;"
-                                          "border-width: 2px;"
-                                          "border-color: black;"
-                                          "border-radius: 10px;"
-                                          "font: 16px;}"
-                                          "QPushButton:!hover:!pressed"
-                                          "{background-color: rgba(255,0,0,1);"
-                                          "color:white;"
-                                          "border:4px solid #000;"
-                                          "border-width: 2px;"
-                                          "border-color: black;"
-                                          "border-radius: 10px;"
-                                          "font: bold 14px;}"
-                                          "QPushButton:pressed"
-                                          "{background-color: rgba(255,0,0,0.5);"
-                                          "border:4px solid #000;"
-                                          "border-width: 1px;"
-                                          "border-color: grey;"
-                                          "border-radius: 10px;"
-                                          "font: bold 14px;}")
-        #self.generateButton.clicked.connect(self.generateButtonFunction)
+        self.dataTypesButton = QtWidgets.QPushButton(self)
+        self.dataTypesButton.setText("Choose File")
+        self.dataTypesButton.setGeometry(330, 160, 100, 30)
+        self.dataTypesButton.setFont(QtGui.QFont("Sanserif", 10))
+        self.dataTypesButton.setToolTip('This is an example button')
+        self.dataTypesButton.clicked.connect(self.sellectDataTypesFile)
 
-        self.showMenuBar()
-        self.showToolBar()
 
-    def showMenuBar(self):
-        self.menuBar = QtWidgets.QMenuBar(self)
-        self.setMenuBar(self.menuBar)
-        self.menuBar.setStyleSheet("""QMenuBar {border: 1px solid #000;}""")
+        self.createButton = QtWidgets.QPushButton(self)
+        self.createButton.setText("Next")
+        self.createButton.move(350, 250)
+        self.createButton.resize(150, 50)
+        self.createButton.setFont(QtGui.QFont("Sanserif", 15))
+        self.createButton.setIcon(QIcon(":/images/plus.png"))
+        self.createButton.setIconSize(QSize(30, 30))
+        self.createButton.setToolTip('This is an example button')
+        self.createButton.clicked.connect(self.createName)
 
-        self.fileMenu = self.menuBar.addMenu('File')
-        self.newProjectItem = QAction('New Project', self)
-        self.fileMenu.addAction(self.newProjectItem)
-        #self.newProjectItem.triggered.connect(self.createProjectWindow)
+    def createName(self):
+        self.osCheck = self.osTextBox.text()
+        self.swcsCheck = self.swcsTextBox.toPlainText()
+        self.dataTypesCheck = self.dataTypesTextBox.toPlainText()
+        self.switch_window.emit()
+        """if self.osCheck == "" or self.osCheck == " ":
+            self.showPopupFileError('OS')
 
-        self.openExitProjectItem = QAction('Open Project', self)
-        self.fileMenu.addAction(self.openExitProjectItem)
-        #self.openExitProjectItem.triggered.connect(self.exitItemAction)
+        elif self.swcsCheck == "" or self.swcsCheck == " ":
+            self.showPopupFileError('SwCs')
 
-        self.saveProjectItem = QAction('Save', self)
-        self.fileMenu.addAction(self.saveProjectItem)
-        #self.saveProjectItem.triggered.connect(self.saveButtonFunction)
-
-        self.exitItem = QAction('Exit', self)
-        self.fileMenu.addAction(self.exitItem)
-        #self.exitItem.triggered.connect(self.exitItemAction)
-
-        self.generateMenu = self.menuBar.addMenu('Generate')
-        self.generateMenuItem = QAction('C Generate', self)
-        #self.generateMenu.addAction(self.generateMenuItem)
-
-        self.settingMenu = self.menuBar.addMenu('Setting')
-        self.settingMenuItem = QAction('Project Setting', self)
-        #self.settingMenu.addAction(self.settingMenuItem)
-
-        self.helpMenu = self.menuBar.addMenu('Help')
-        self.helpMenuItem = QAction('About', self)
-        #self.helpMenu.addAction(self.helpMenuItem)
-
-    def exitItemAction(self):
-        if self.saveFlag:
-            QtWidgets.QApplication.quit()
+        elif self.dataTypesCheck == "" or self.dataTypesCheck == " ":
+            self.showPopupFileError('dataTypes and interface')
         else:
-            questionMessage = QMessageBox()
-            ret = questionMessage.question(self, '', "Do you want to save project?",
-                                           questionMessage.Yes | questionMessage.No | questionMessage.Cancel)
-            questionMessage.setDefaultButton(questionMessage.Cancel)
-            if ret == questionMessage.Yes:
-                self.saveButtonFunction()
-                QtWidgets.QApplication.quit()
-            elif ret == questionMessage.No:
-                QtWidgets.QApplication.quit()
-
-    def showToolBar(self):
-        self.toolBar = QtWidgets.QToolBar(self)
-        self.addToolBar(self.toolBar)
-
-        self.addToolBarItem = QAction("add", self)
-        self.addToolBarItem.setIcon(QtGui.QIcon('plus.png'))
-        self.toolBar.addAction(self.addToolBarItem)
-        #self.addToolBarItem.triggered.connect(self.addContainers)
-
-        self.deleteToolBarItem = QAction("delete", self)
-        self.deleteToolBarItem.setIcon(QtGui.QIcon('delete.jpg'))
-        self.toolBar.addAction(self.deleteToolBarItem)
-        #self.deleteToolBarItem.triggered.connect(self.deleteSelectedContainer)
-
-    def show_popup_message(self):
-        msg = QMessageBox()
-        msg.setWindowTitle("error message")
-        msg.setText("No Module is Checked")
-        msgRun = msg.exec_()
-
-    def configure_button(self):
-        if self.x == 1:
             self.switch_window.emit()
+"""
+    def sellectComFile(self):
+        # open select folder dialog
+        self.filePath = QFileDialog.getOpenFileName(self, 'choose file')
+        if "Com.arxml" in self.filePath[0]:
+            self.comTextBox.setText(self.filePath[0])
+            #self.parser = GeneratedArxmlParser(filepath=self.filePath[0])
+            #self.comModuleDataObject = self.parser.getModuleDataObject()
+            print(self.filePath1[0])
         else:
-            self.show_popup_message()
+            self.showPopupFileError('Com')
+
+    def sellectDataTypesFile(self):
+        self.filePath1 = QFileDialog.getOpenFileNames(self, 'choose file')
+        print(self.filePath1[0])
+        self.cutString1(self.filePath1[0])
+
+    def selectOSFile(self):
+        # open select folder dialog
+        self.filePath1 = QFileDialog.getOpenFileName(self, 'choose file')
+        if "Os.arxml" in self.filePath1[0]:
+            self.osTextBox.setText(self.filePath1[0])
+            #self.parser = GeneratedArxmlParser(filepath=self.filePath1[0])
+            #self.osModuleDataObject = self.parser.getModuleDataObject()
+            print(self.filePath1[0])
+        else:
+            self.showPopupFileError('Os')
+
+    def sellectSwCsFile(self):
+        self.filePath1 = QFileDialog.getOpenFileNames(self, 'choose file')
+        # self.swcsTextBox.setText(self.filePath1[0][0] + ' || ' + self.filePath1[0][1])
+        print(self.filePath1[0])
+        self.cutString(self.filePath1[0])
+
+        # s.rfind
+
+    def showPopupFileError(self, s):
+        self.msg = QMessageBox()
+        self.msg.setWindowTitle("error message")
+        self.msg.setText("You must choose " + s + ".arxml File")
+        msgRun = self.msg.exec_()
+
+    def cutString(self, arr):
+        for as1 in arr:
+            indexch = as1.rfind('/')
+            print(as1[indexch + 1:])
+            self.swcsTextBox.appendPlainText(as1[indexch + 1:])
+
+    def cutString1(self, arr):
+        for as1 in arr:
+            indexch = as1.rfind('/')
+            print(as1[indexch + 1:])
+            self.dataTypesTextBox.appendPlainText(as1[indexch + 1:])

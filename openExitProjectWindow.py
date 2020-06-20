@@ -11,11 +11,11 @@ class openExitProject(QtWidgets.QMdiSubWindow):
     switch_window = QtCore.pyqtSignal()
     filePath = ''
 
-    def __init__(self):
+    def __init__(self,toolName,toolIcon):
         super(openExitProject,self).__init__()
         self.setGeometry(400, 150, 550, 350)
-        self.setWindowTitle("Autosar Tool")
-        self.setWindowIcon(QtGui.QIcon(':/images/FOE.png'))
+        self.setWindowTitle(toolName)
+        self.setWindowIcon(QtGui.QIcon(toolIcon))
         self.initui()
 
     def initui(self):

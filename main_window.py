@@ -9,10 +9,10 @@ class MainWindow(QMainWindow):
     switch_create_window = QtCore.pyqtSignal()
     switch_open_window = QtCore.pyqtSignal()
 
-    def __init__(self):
+    def __init__(self,toolName,toolIcon):
         super(MainWindow, self).__init__()
-        self.setWindowTitle("AutoSar Generic Tool")
-        self.setWindowIcon(QtGui.QIcon(':/images/FOE.png'))
+        self.setWindowTitle(toolName)
+        self.setWindowIcon(QtGui.QIcon(toolIcon))
 
         self.menuBar = QtWidgets.QMenuBar(self)
         self.setMenuBar(self.menuBar)
