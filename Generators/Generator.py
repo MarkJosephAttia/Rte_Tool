@@ -11,7 +11,7 @@ class C_Generator:
             os.mkdir('Output')
         except OSError:  
             None   
-        f = open("Output\Rte.h", "w")
+        f = open("Output\Rtetypes.h", "w")
         f.write('#ifndef RTE_H_\n')
         f.write('#define RTE_H_\n')
         for i in self.Elements.Implementation_Data_Types:
