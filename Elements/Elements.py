@@ -8,10 +8,10 @@ from Interfaces.DataElement                         import DataElement
 from DataTypes.ImplementationDataType               import ImplementationDataType
 from Interfaces.SenderRecieverInterface             import SenderRecieverInterface
 from Interfaces.ClientServerInterface               import ClientServerInterface
-from ApplicationSWC.Application_SWC_Type            import Application_SWC
+from ApplicationSWC.SWC_Type            import SWC
 from DataTypes.ElementsParser                       import ElementParser
 from Interfaces.InterfacesParser                    import InterfaceParser
-from ApplicationSWC.ApplicationSW_ComponentParser   import ApplicationSWCparser
+from ApplicationSWC.SW_ComponentParser              import ApplicationSWCparser
 
 ## Description : This class contains all the application ports, interfaces, BaseTypes and SWCs
 
@@ -38,6 +38,11 @@ class Element:
         print(Inputs.DataTypesAndInterfaces_filePath)
         self.DataTypesAndInterfaces_filePath = Inputs.DataTypesAndInterfaces_filePath
         self.Package_Name    = ElementParser(self.DataTypesAndInterfaces_filePath).getARpackage()
+        self.Base_Data_Types                 = []
+        self.Implementation_Data_Types       = []
+        self.Sender_Reciever_Port_Interfaces = []
+        self.Client_Server_Port_Interfaces   = []
+        self.Application_SWC_Types           = [] 
         
 
     # Get Implementation Info
@@ -60,7 +65,7 @@ class Element:
     def getApplicationSWCTypes(self):
 
         for SWC_filePath in self.Application_SWC_filePath: 
-            self.Application_SWC_Types.extend(ApplicationSWCparser(SWC_filePath).getApplicationSWC())
+            self.Application_SWC_Types.extend(ApplicationSWCparser(SWC_filePath).getSWC())
     
     
     def update(self):
@@ -69,19 +74,3 @@ class Element:
         self.getSenderRecieverPortIF()
         self.getClientServerPortIF()
         self.getApplicationSWCTypes()
-    
-
-# x = Element()
-# x.update()
-# for i in x.Sender_Reciever_Port_Interfaces:#Application_SWC_Types:
-#     print('\n\n')
-#     for j in i.Data_Elements:
-#         print('Name: ' + j.Name)
-    # print('Category: ' + i.Category)
-    # print('Type: ' + str(i.ReferenceTypeID))
-    # if i.SizeOfElements is not None:
-    #     print('Size: ' + str(i.SizeOfElements))
-    # print('Sub Elements: ')
-    # for j in i.SubElements:
-    #     print('              Name: ' + j.Name)
-    #     print('              Type: ' + str(j.ReferenceTypeID))

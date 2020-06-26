@@ -19,8 +19,7 @@ class Port(BaseElement):
             self.Port_Type          = Port_Type
         if Interface_Type:
             self.Interface_Type     = Interface_Type
-        if Interface_ID:
-            self.Interface_ID       = Interface_ID
+        self.Interface_ID       = Interface_ID
 
         if self.Interface_Type == 'Sender_Reciever_Interface':
             self.Port_DataElement       = None

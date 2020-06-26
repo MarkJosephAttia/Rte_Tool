@@ -8,7 +8,6 @@ from images import *
 class MainWindow(QMainWindow):
     switch_create_window = QtCore.pyqtSignal()
     switch_open_window = QtCore.pyqtSignal()
-
     def __init__(self,toolName,toolIcon):
         super(MainWindow, self).__init__()
         self.setWindowTitle(toolName)
@@ -16,8 +15,6 @@ class MainWindow(QMainWindow):
 
         self.menuBar = QtWidgets.QMenuBar(self)
         self.setMenuBar(self.menuBar)
-        #self.menuBar.setStyleSheet("""QMenuBar {border: 1px solid #000;}""")
-
         self.fileMenu = self.menuBar.addMenu('File')
 
         self.newProjectItem = QAction('New Project', self)
