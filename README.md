@@ -14,7 +14,11 @@ The RTE connects Application Software components, Basic Software components, ser
 
 Cordoba RTE Tool Project is written with Python 3 and PyQt 4.
 
-The input for this tool are The arxml files from the AUTOSAR Studio and The BSW Tool for OS and Comm. 
+The input for this tool are The arxml files from the Cordoba APP Studio and The BSW Tool for OS and Comm. 
+
+For more information about Cordoba APP Studio:
+    
+    git clone https://github.com/mAbdelhay/Autosar_Studio
 
 ## Setup
 
