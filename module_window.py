@@ -5,7 +5,6 @@ from PyQt5.QtCore import QSize, QDir, QFile
 from PyQt5.QtGui import *
 from images import *
 from PyQt5.QtWidgets import *
-from Generators.Generator import C_Generator
 from InputPathes.InputPathes import Inputs
 import module_configure
 from Elements.Elements import Element 
@@ -120,8 +119,6 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
         self.switch_window.emit()
         swcFiles = []
         swcFiles = self.swcsTextBox.toPlainText().split()
-        print('Our List:       ')
-        print(swcFiles)
         Inputs(swcFiles)
         Inputs.DataTypesAndInterfaces_filePath = self.dataTypesTextBox.toPlainText()
         
@@ -131,6 +128,11 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
 
         Elements = Element()
         Elements.update()
+
+        for i in Elements.Application_SWC_Types:
+            for j in i.Ports:
+                if j.Port_Type == 'R-Port':
+                    module_configure.moduleConfg.portConnections[j.Name] = 'None'
         
         for i in Elements.Application_SWC_Types:
             if i.Type == 'Application SWC':
@@ -139,19 +141,10 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
                 Complex_Driver_SWC.append(i.Name)
             elif i.Type == 'Service SWC':
                 Service_Software_SWC.append(i.Name)
-            print("Typeeeee")
-            print(i.Type)
         
         module_configure.moduleConfg.treeOfCheckedModules(module_configure.moduleConfg, App_SWC, 0)
         module_configure.moduleConfg.treeOfCheckedModules(module_configure.moduleConfg, Complex_Driver_SWC, 1)
         module_configure.moduleConfg.treeOfCheckedModules(module_configure.moduleConfg, Service_Software_SWC, 2)
-
-
-        self.generator = C_Generator()
-        self.generator.Rte_h_Gen()
-        self.generator.Rte_runnable_Gen()
-        self.generator.Rte_port_Gen()
-        self.generator.Rte_Src_Gen()
 
         """if self.osCheck == "" or self.osCheck == " ":
             self.showPopupFileError('OS')
@@ -171,7 +164,6 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
             self.comTextBox.setText(self.filePath[0])
             #self.parser = GeneratedArxmlParser(filepath=self.filePath[0])
             #self.comModuleDataObject = self.parser.getModuleDataObject()
-            print(self.filePath1[0])
         else:
             self.showPopupFileError('Com')
 
@@ -186,7 +178,6 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
             self.osTextBox.setText(self.filePath1[0])
             #self.parser = GeneratedArxmlParser(filepath=self.filePath1[0])
             #self.osModuleDataObject = self.parser.getModuleDataObject()
-            print(self.filePath1[0])
         else:
             self.showPopupFileError('Os')
 
@@ -194,7 +185,6 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
         self.filePath1 = QFileDialog.getOpenFileNames(self, 'OpenFile')
         #self.filePath1 = QFileDialog.getOpenFileNames(self, 'choose file')
         # self.swcsTextBox.setText(self.filePath1[0][0] + ' || ' + self.filePath1[0][1])
-        print(self.filePath1[0][0])
         self.cutString(self.filePath1[0][0])
 
         # s.rfind

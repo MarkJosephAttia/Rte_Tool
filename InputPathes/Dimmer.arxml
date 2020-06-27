@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AUTOSAR xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-3-0.xsd" xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>Dimmer</SHORT-NAME>
+      <ELEMENTS>
+        <APPLICATION-SW-COMPONENT-TYPE>
+          <APPLICATION-SW-COMPONENT-TYPE>
+            <SHORT-NAME>Dimmer</SHORT-NAME>
+            <PORTS>
+              <R-PORT-PROTOTYPE>
+                <SHORT-NAME>Dimmer_From_Door_Port</SHORT-NAME>
+                <REQUIRED-COM-SPECS>
+                  <NONQUEUED-RECEIVER-COM-SPEC>
+                    <DATA-ELEMENT-REF DEST="VARIABLE-DATA-PROTOTYPE">/PortInterfaces/Door_Interface/Array_Data_Element</DATA-ELEMENT-REF>
+                  </NONQUEUED-RECEIVER-COM-SPEC>
+                </REQUIRED-COM-SPECS>
+                <REQUIRED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/PortInterfaces/Door_Interface</REQUIRED-INTERFACE-TREF>
+              </R-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE>
+                <SHORT-NAME>Dimmer_To_Light_Port</SHORT-NAME>
+                <PROVIDED-COM-SPECS>
+                  <NONQUEUED-SENDER-COM-SPEC>
+                    <DATA-ELEMENT-REF DEST="VARIABLE-DATA-PROTOTYPE">/PortInterfaces/Light_Interface/Struct_Data_Element</DATA-ELEMENT-REF>
+                  </NONQUEUED-SENDER-COM-SPEC>
+                </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/PortInterfaces/Light_Interface</PROVIDED-INTERFACE-TREF>
+              </P-PORT-PROTOTYPE>
+            </PORTS>
+            <INTERNAL-BEHAVIORS>
+              <SWC-INTERNAL-BEHAVIOR>
+                <SHORT-NAME>Dimmer_InternalBehavior</SHORT-NAME>
+              </SWC-INTERNAL-BEHAVIOR>
+            </INTERNAL-BEHAVIORS>
+          </APPLICATION-SW-COMPONENT-TYPE>
+          <SWC-IMPLEMENTATION>
+            <SHORT-NAME>Dimmer_Implementation</SHORT-NAME>
+            <BEHAVIOR-REF DEST="SWC-INTERNAL-BEHAVIOR">/Dimmer/Dimmer/Dimmer_InternalBehavior</BEHAVIOR-REF>
+          </SWC-IMPLEMENTATION>
+        </APPLICATION-SW-COMPONENT-TYPE>
+      </ELEMENTS>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

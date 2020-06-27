@@ -65,9 +65,7 @@ class createWindow(QtWidgets.QMdiSubWindow):
     def createName(self):
         self.name = self.nameTextBox.text()
         if self.name == "" or self.name == " ":
-            #self.show_popup_name_error()
-            #MARK#
-            self.switch_window.emit()
+            self.show_popup_name_error()
 
         elif self.dirFolder == "" or self.dirFolder == " ":
             self.show_popup_folder_error()

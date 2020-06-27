@@ -60,7 +60,6 @@ class openExitProject(QtWidgets.QMdiSubWindow):
         # open select folder dialog
         self.filePath = QFileDialog.getOpenFileName(self, 'choose file')
         self.folderTextBox.setText(self.filePath[0])
-        print(self.filePath[0])
         #self.parser = GeneratedArxmlParser(filepath=self.filePath)
         #self.moduleDataObject = self.parser.getModuleDataObject()
 

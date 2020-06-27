@@ -2,18 +2,18 @@
 <AUTOSAR xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-3-0.xsd" xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <AR-PACKAGES>
     <AR-PACKAGE>
-      <SHORT-NAME>For_Mira</SHORT-NAME>
+      <SHORT-NAME>Dimmer</SHORT-NAME>
       <AR-PACKAGES>
         <AR-PACKAGE>
           <SHORT-NAME>ImplementationDataTypes</SHORT-NAME>
           <ELEMENTS>
             <IMPLEMENTATION-DATA-TYPE>
-              <SHORT-NAME>Value_One</SHORT-NAME>
+              <SHORT-NAME>Value_1</SHORT-NAME>
               <CATEGORY>VALUE</CATEGORY>
               <SW-DATA-DEF-PROPS>
                 <SW-DATA-DEF-PROPS-VARIANTS>
                   <SW-DATA-DEF-PROPS-CONDITIONAL>
-                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/For_Mira/SwBaseTypes/boolean</BASE-TYPE-REF>
+                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/sint8</BASE-TYPE-REF>
                   </SW-DATA-DEF-PROPS-CONDITIONAL>
                 </SW-DATA-DEF-PROPS-VARIANTS>
               </SW-DATA-DEF-PROPS>
@@ -24,7 +24,7 @@
           <SHORT-NAME>ImplementationDataTypes</SHORT-NAME>
           <ELEMENTS>
             <IMPLEMENTATION-DATA-TYPE>
-              <SHORT-NAME>Array_One</SHORT-NAME>
+              <SHORT-NAME>Array_1</SHORT-NAME>
               <CATEGORY>ARRAY</CATEGORY>
               <SUB-ELEMENTS>
                 <IMPLEMENTATION-DATA-TYPE-ELEMENT>
@@ -35,26 +35,7 @@
                   <SW-DATA-DEF-PROPS>
                     <SW-DATA-DEF-PROPS-VARIANTS>
                       <SW-DATA-DEF-PROPS-CONDITIONAL>
-                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/For_Mira/SwBaseTypes/boolean</BASE-TYPE-REF>
-                      </SW-DATA-DEF-PROPS-CONDITIONAL>
-                    </SW-DATA-DEF-PROPS-VARIANTS>
-                  </SW-DATA-DEF-PROPS>
-                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
-              </SUB-ELEMENTS>
-            </IMPLEMENTATION-DATA-TYPE>
-            <IMPLEMENTATION-DATA-TYPE>
-              <SHORT-NAME>Array_Two</SHORT-NAME>
-              <CATEGORY>ARRAY</CATEGORY>
-              <SUB-ELEMENTS>
-                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
-                  <SHORT-NAME>Element</SHORT-NAME>
-                  <CATEGORY>Value</CATEGORY>
-                  <ARRAY-SIZE>10</ARRAY-SIZE>
-                  <ARRAY-SIZE-SEMANTICS>FIXED-SIZE</ARRAY-SIZE-SEMANTICS>
-                  <SW-DATA-DEF-PROPS>
-                    <SW-DATA-DEF-PROPS-VARIANTS>
-                      <SW-DATA-DEF-PROPS-CONDITIONAL>
-                        <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/For_Mira/ImplementationDataTypes/Value_One</IMPLEMENTATION-DATA-TYPE-REF>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/uint8</BASE-TYPE-REF>
                       </SW-DATA-DEF-PROPS-CONDITIONAL>
                     </SW-DATA-DEF-PROPS-VARIANTS>
                   </SW-DATA-DEF-PROPS>
@@ -69,34 +50,23 @@
             <CATEGORY>STRUCTURE</CATEGORY>
             <SUB-ELEMENTS>
               <IMPLEMENTATION-DATA-TYPE-ELEMENT>
-                <SHORT-NAME>Boolean_Element</SHORT-NAME>
+                <SHORT-NAME>Int</SHORT-NAME>
                 <CATEGORY>Value</CATEGORY>
                 <SW-DATA-DEF-PROPS>
                   <SW-DATA-DEF-PROPS-VARIANTS>
                     <SW-DATA-DEF-PROPS-CONDITIONAL>
-                      <BASE-TYPE-REF DEST="SW-BASE-TYPE">/For_Mira/SwBaseTypes/boolean</BASE-TYPE-REF>
+                      <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/sint8</BASE-TYPE-REF>
                     </SW-DATA-DEF-PROPS-CONDITIONAL>
                   </SW-DATA-DEF-PROPS-VARIANTS>
                 </SW-DATA-DEF-PROPS>
               </IMPLEMENTATION-DATA-TYPE-ELEMENT>
               <IMPLEMENTATION-DATA-TYPE-ELEMENT>
-                <SHORT-NAME>Array_Element</SHORT-NAME>
-                <CATEGORY>Array</CATEGORY>
-                <SW-DATA-DEF-PROPS>
-                  <SW-DATA-DEF-PROPS-VARIANTS>
-                    <SW-DATA-DEF-PROPS-CONDITIONAL>
-                      <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/For_Mira/ImplementationDataTypes/Array_One</IMPLEMENTATION-DATA-TYPE-REF>
-                    </SW-DATA-DEF-PROPS-CONDITIONAL>
-                  </SW-DATA-DEF-PROPS-VARIANTS>
-                </SW-DATA-DEF-PROPS>
-              </IMPLEMENTATION-DATA-TYPE-ELEMENT>
-              <IMPLEMENTATION-DATA-TYPE-ELEMENT>
-                <SHORT-NAME>Value_Element</SHORT-NAME>
+                <SHORT-NAME>Bool</SHORT-NAME>
                 <CATEGORY>Value</CATEGORY>
                 <SW-DATA-DEF-PROPS>
                   <SW-DATA-DEF-PROPS-VARIANTS>
                     <SW-DATA-DEF-PROPS-CONDITIONAL>
-                      <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/For_Mira/ImplementationDataTypes/Value_One</IMPLEMENTATION-DATA-TYPE-REF>
+                      <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/boolean</BASE-TYPE-REF>
                     </SW-DATA-DEF-PROPS-CONDITIONAL>
                   </SW-DATA-DEF-PROPS-VARIANTS>
                 </SW-DATA-DEF-PROPS>
@@ -145,30 +115,46 @@
           <SHORT-NAME>PortInterfaces</SHORT-NAME>
           <ELEMENTS>
             <SENDER-RECEIVER-INTERFACE>
-              <SHORT-NAME>Sender_Receiver</SHORT-NAME>
+              <SHORT-NAME>Door_Interface</SHORT-NAME>
               <DATA-ELEMENTS>
                 <VARIABLE-DATA-PROTOTYPE>
-                  <SHORT-NAME>SR_DataElement</SHORT-NAME>
-                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/For_Mira/ImplementationDataTypes/Struct_1</TYPE-TREF>
+                  <SHORT-NAME>Array_Data_Element</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Array_1</TYPE-TREF>
+                </VARIABLE-DATA-PROTOTYPE>
+              </DATA-ELEMENTS>
+            </SENDER-RECEIVER-INTERFACE>
+            <SENDER-RECEIVER-INTERFACE>
+              <SHORT-NAME>Light_Interface</SHORT-NAME>
+              <DATA-ELEMENTS>
+                <VARIABLE-DATA-PROTOTYPE>
+                  <SHORT-NAME>Struct_Data_Element</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Struct_1</TYPE-TREF>
                 </VARIABLE-DATA-PROTOTYPE>
               </DATA-ELEMENTS>
             </SENDER-RECEIVER-INTERFACE>
             <CLIENT-SERVER-INTERFACE>
-              <SHORT-NAME>Client_Server</SHORT-NAME>
+              <SHORT-NAME>Client_Server_Interface</SHORT-NAME>
               <OPERATIONS>
                 <CLIENT-SERVER-OPERATION>
-                  <SHORT-NAME>CS_Operation</SHORT-NAME>
+                  <SHORT-NAME>Op1</SHORT-NAME>
                   <ARGUMENTS>
                     <ARGUMENT-DATA-PROTOTYPE>
                       <SHORT-NAME>arg1</SHORT-NAME>
-                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/For_Mira/ImplementationDataTypes/Struct_1</TYPE-TREF>
+                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Struct_1</TYPE-TREF>
                       <DIRECTION>
                         <DIRECTION>output</DIRECTION>
                       </DIRECTION>
                     </ARGUMENT-DATA-PROTOTYPE>
                     <ARGUMENT-DATA-PROTOTYPE>
                       <SHORT-NAME>arg2</SHORT-NAME>
-                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/For_Mira/ImplementationDataTypes/Value_One</TYPE-TREF>
+                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Array_1</TYPE-TREF>
+                      <DIRECTION>
+                        <DIRECTION>input</DIRECTION>
+                      </DIRECTION>
+                    </ARGUMENT-DATA-PROTOTYPE>
+                    <ARGUMENT-DATA-PROTOTYPE>
+                      <SHORT-NAME>arg3</SHORT-NAME>
+                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Value_1</TYPE-TREF>
                       <DIRECTION>
                         <DIRECTION>input</DIRECTION>
                       </DIRECTION>
