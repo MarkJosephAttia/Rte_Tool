@@ -1,16 +1,9 @@
 #ifndef RTE_H_
 #define RTE_H_
 
-typedef boolean Value_One;
-
-typedef boolean Array_One[10];
-
-typedef Value_One Array_Two[10];
-
-typedef struct {
-     boolean  Boolean_Element;
-     Array_One  Array_Element;
-     Value_One  Value_Element;
-} Struct_1;
+extern Std_ReturnType Rte_Read_Door_To_Dimmer_Port_Array_Data_Element(Array_1 *data);
+extern Std_ReturnType Rte_Write_Dimmer_To_Light_Port_Struct_Data_Element(Struct_1 *data);
+extern Std_ReturnType Rte_Write_Door_To_Dimmer_Port_Array_Data_Element(Array_1 *data);
+extern Std_ReturnType Rte_Read_Dimmer_To_Light_Port_Struct_Data_Element(Struct_1 *data);
 
 #endif

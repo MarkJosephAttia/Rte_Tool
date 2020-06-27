@@ -1,3 +1,5 @@
+import sys
+import copy
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QSize
 from moduleConfgFrames import *
@@ -5,11 +7,10 @@ from images import *
 from PyQt5.QtWidgets import *
 from PyQt5.Qt import *
 from PyQt5.QtGui import QFont, QColor, QIcon
-import copy
 from Elements.Elements import Element
 import functools
 from PyQt5.QtCore import pyqtSlot
-import sys
+from Generators.Generator import C_Generator
 # import module_window
 
 
@@ -292,15 +293,14 @@ class moduleConfg(QMainWindow):
                             self.parametersAndReferencesRows.addRow(a.Name, self.comboBox)
 
     def getValue(self, val):
-        print(val.data())
-        print(val.row())
+        None
+        # print(val.data())
+        # print(val.row())
 
     def SelectedIndex(self,PortName):
-        print(PortName)
         for i in reversed(range(self.parametersAndReferencesRows.count())):
             if self.parametersAndReferencesRows.itemAt(i).widget() is not None:
                 if self.parametersAndReferencesRows.itemAt(i).widget().objectName() == PortName:
-                    print(self.parametersAndReferencesRows.itemAt(i).widget().currentText())
                     self.portConnections[PortName] = self.parametersAndReferencesRows.itemAt(i).widget().currentText()
 
 
@@ -377,7 +377,11 @@ class moduleConfg(QMainWindow):
 
     def generateButtonFunction(self):
         # when user press on generate button write here what do you want to execute
-        pass
+        self.generator = C_Generator()
+        self.generator.Rte_h_Gen()
+        self.generator.Rte_runnable_Gen()
+        self.generator.Rte_port_Gen()
+        self.generator.Rte_Src_Gen()
 
     def showPopUpmCompleteMessage(self,massage):
         msg = QMessageBox()
@@ -388,7 +392,6 @@ class moduleConfg(QMainWindow):
 
     def getFolderDirection(self,folderdir):
         self.folderNameDir = folderdir
-        print(self.folderNameDir)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         questionMessage = QMessageBox()
@@ -418,4 +421,3 @@ class moduleConfg(QMainWindow):
 
     def projectName(self, name):
         self.projectName = name
-        print(self.projectName)

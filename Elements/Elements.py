@@ -35,7 +35,6 @@ class Element:
      
     # Elements Class constructor function
     def __init__(self):
-        print(Inputs.DataTypesAndInterfaces_filePath)
         self.DataTypesAndInterfaces_filePath = Inputs.DataTypesAndInterfaces_filePath
         self.Package_Name    = ElementParser(self.DataTypesAndInterfaces_filePath).getARpackage()
         self.Base_Data_Types                 = []

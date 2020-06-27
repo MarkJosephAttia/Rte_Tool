@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AUTOSAR xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-3-0.xsd" xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>Dimmer</SHORT-NAME>
+      <ELEMENTS>
+        <APPLICATION-SW-COMPONENT-TYPE>
+          <APPLICATION-SW-COMPONENT-TYPE>
+            <SHORT-NAME>Light</SHORT-NAME>
+            <PORTS>
+              <R-PORT-PROTOTYPE>
+                <SHORT-NAME>Light_From_Dimmer_Port</SHORT-NAME>
+                <REQUIRED-COM-SPECS>
+                  <NONQUEUED-RECEIVER-COM-SPEC>
+                    <DATA-ELEMENT-REF DEST="VARIABLE-DATA-PROTOTYPE">/PortInterfaces/Light_Interface/Struct_Data_Element</DATA-ELEMENT-REF>
+                  </NONQUEUED-RECEIVER-COM-SPEC>
+                </REQUIRED-COM-SPECS>
+                <REQUIRED-INTERFACE-TREF DEST="SENDER-RECEIVER-INTERFACE">/PortInterfaces/Light_Interface</REQUIRED-INTERFACE-TREF>
+              </R-PORT-PROTOTYPE>
+              <P-PORT-PROTOTYPE>
+                <SHORT-NAME>Light_To_CDD_Port</SHORT-NAME>
+                <PROVIDED-COM-SPECS>
+                  <SERVER-COM-SPEC>
+                    <OPERATION-REF DEST="CLIENT-SERVER-OPERATION">/PortInterfaces/Client_Server_Interface/Op1</OPERATION-REF>
+                  </SERVER-COM-SPEC>
+                </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="CLIENT-SERVER-INTERFACE">/PortInterfaces/Client_Server_Interface</PROVIDED-INTERFACE-TREF>
+              </P-PORT-PROTOTYPE>
+            </PORTS>
+            <INTERNAL-BEHAVIORS>
+              <SWC-INTERNAL-BEHAVIOR>
+                <SHORT-NAME>Light_InternalBehavior</SHORT-NAME>
+              </SWC-INTERNAL-BEHAVIOR>
+            </INTERNAL-BEHAVIORS>
+          </APPLICATION-SW-COMPONENT-TYPE>
+          <SWC-IMPLEMENTATION>
+            <SHORT-NAME>Light_Implementation</SHORT-NAME>
+            <BEHAVIOR-REF DEST="SWC-INTERNAL-BEHAVIOR">/Dimmer/Light/Light_InternalBehavior</BEHAVIOR-REF>
+          </SWC-IMPLEMENTATION>
+        </APPLICATION-SW-COMPONENT-TYPE>
+      </ELEMENTS>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>
