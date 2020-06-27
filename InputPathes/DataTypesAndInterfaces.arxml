@@ -8,12 +8,34 @@
           <SHORT-NAME>ImplementationDataTypes</SHORT-NAME>
           <ELEMENTS>
             <IMPLEMENTATION-DATA-TYPE>
-              <SHORT-NAME>Value_1</SHORT-NAME>
+              <SHORT-NAME>DoorStatus_t</SHORT-NAME>
               <CATEGORY>VALUE</CATEGORY>
               <SW-DATA-DEF-PROPS>
                 <SW-DATA-DEF-PROPS-VARIANTS>
                   <SW-DATA-DEF-PROPS-CONDITIONAL>
-                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/sint8</BASE-TYPE-REF>
+                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/boolean</BASE-TYPE-REF>
+                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+              </SW-DATA-DEF-PROPS>
+            </IMPLEMENTATION-DATA-TYPE>
+            <IMPLEMENTATION-DATA-TYPE>
+              <SHORT-NAME>DimmerStatus_t</SHORT-NAME>
+              <CATEGORY>VALUE</CATEGORY>
+              <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                    <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/DoorStatus_t</IMPLEMENTATION-DATA-TYPE-REF>
+                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+              </SW-DATA-DEF-PROPS>
+            </IMPLEMENTATION-DATA-TYPE>
+            <IMPLEMENTATION-DATA-TYPE>
+              <SHORT-NAME>SwitchState_t</SHORT-NAME>
+              <CATEGORY>VALUE</CATEGORY>
+              <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                    <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/DoorStatus_t</IMPLEMENTATION-DATA-TYPE-REF>
                   </SW-DATA-DEF-PROPS-CONDITIONAL>
                 </SW-DATA-DEF-PROPS-VARIANTS>
               </SW-DATA-DEF-PROPS>
@@ -24,18 +46,18 @@
           <SHORT-NAME>ImplementationDataTypes</SHORT-NAME>
           <ELEMENTS>
             <IMPLEMENTATION-DATA-TYPE>
-              <SHORT-NAME>Array_1</SHORT-NAME>
+              <SHORT-NAME>Array_t</SHORT-NAME>
               <CATEGORY>ARRAY</CATEGORY>
               <SUB-ELEMENTS>
                 <IMPLEMENTATION-DATA-TYPE-ELEMENT>
                   <SHORT-NAME>Element</SHORT-NAME>
                   <CATEGORY>Value</CATEGORY>
-                  <ARRAY-SIZE>10</ARRAY-SIZE>
+                  <ARRAY-SIZE>5</ARRAY-SIZE>
                   <ARRAY-SIZE-SEMANTICS>FIXED-SIZE</ARRAY-SIZE-SEMANTICS>
                   <SW-DATA-DEF-PROPS>
                     <SW-DATA-DEF-PROPS-VARIANTS>
                       <SW-DATA-DEF-PROPS-CONDITIONAL>
-                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/uint8</BASE-TYPE-REF>
+                        <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/DoorStatus_t</IMPLEMENTATION-DATA-TYPE-REF>
                       </SW-DATA-DEF-PROPS-CONDITIONAL>
                     </SW-DATA-DEF-PROPS-VARIANTS>
                   </SW-DATA-DEF-PROPS>
@@ -46,22 +68,22 @@
         </AR-PACKAGE>
         <AR-PACKAGE>
           <IMPLEMENTATION-DATA-TYPE>
-            <SHORT-NAME>Struct_1</SHORT-NAME>
+            <SHORT-NAME>Struct_t</SHORT-NAME>
             <CATEGORY>STRUCTURE</CATEGORY>
             <SUB-ELEMENTS>
               <IMPLEMENTATION-DATA-TYPE-ELEMENT>
-                <SHORT-NAME>Int</SHORT-NAME>
+                <SHORT-NAME>Element_1</SHORT-NAME>
                 <CATEGORY>Value</CATEGORY>
                 <SW-DATA-DEF-PROPS>
                   <SW-DATA-DEF-PROPS-VARIANTS>
                     <SW-DATA-DEF-PROPS-CONDITIONAL>
-                      <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/sint8</BASE-TYPE-REF>
+                      <BASE-TYPE-REF DEST="SW-BASE-TYPE">/Dimmer/SwBaseTypes/uint8</BASE-TYPE-REF>
                     </SW-DATA-DEF-PROPS-CONDITIONAL>
                   </SW-DATA-DEF-PROPS-VARIANTS>
                 </SW-DATA-DEF-PROPS>
               </IMPLEMENTATION-DATA-TYPE-ELEMENT>
               <IMPLEMENTATION-DATA-TYPE-ELEMENT>
-                <SHORT-NAME>Bool</SHORT-NAME>
+                <SHORT-NAME>Element_2</SHORT-NAME>
                 <CATEGORY>Value</CATEGORY>
                 <SW-DATA-DEF-PROPS>
                   <SW-DATA-DEF-PROPS-VARIANTS>
@@ -105,58 +127,71 @@
               <SHORT-NAME>sint32</SHORT-NAME>
               <BASE-TYPE-SIZE>32</BASE-TYPE-SIZE>
             </SW-BASE-TYPE>
-            <SW-BASE-TYPE>
-              <SHORT-NAME>float32</SHORT-NAME>
-              <BASE-TYPE-SIZE>32</BASE-TYPE-SIZE>
-            </SW-BASE-TYPE>
           </ELEMENTS>
         </AR-PACKAGE>
         <AR-PACKAGE>
           <SHORT-NAME>PortInterfaces</SHORT-NAME>
           <ELEMENTS>
             <SENDER-RECEIVER-INTERFACE>
-              <SHORT-NAME>Door_Interface</SHORT-NAME>
+              <SHORT-NAME>DoorInterface</SHORT-NAME>
               <DATA-ELEMENTS>
                 <VARIABLE-DATA-PROTOTYPE>
-                  <SHORT-NAME>Array_Data_Element</SHORT-NAME>
-                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Array_1</TYPE-TREF>
+                  <SHORT-NAME>DoorStatus</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/DoorStatus_t</TYPE-TREF>
                 </VARIABLE-DATA-PROTOTYPE>
               </DATA-ELEMENTS>
             </SENDER-RECEIVER-INTERFACE>
             <SENDER-RECEIVER-INTERFACE>
-              <SHORT-NAME>Light_Interface</SHORT-NAME>
+              <SHORT-NAME>DoorContact_Interface</SHORT-NAME>
               <DATA-ELEMENTS>
                 <VARIABLE-DATA-PROTOTYPE>
-                  <SHORT-NAME>Struct_Data_Element</SHORT-NAME>
-                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Struct_1</TYPE-TREF>
+                  <SHORT-NAME>DoorContact_Status</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/DoorStatus_t</TYPE-TREF>
+                </VARIABLE-DATA-PROTOTYPE>
+              </DATA-ELEMENTS>
+            </SENDER-RECEIVER-INTERFACE>
+            <SENDER-RECEIVER-INTERFACE>
+              <SHORT-NAME>Dimmer_Interface</SHORT-NAME>
+              <DATA-ELEMENTS>
+                <VARIABLE-DATA-PROTOTYPE>
+                  <SHORT-NAME>Dimmer_Status</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/DimmerStatus_t</TYPE-TREF>
+                </VARIABLE-DATA-PROTOTYPE>
+              </DATA-ELEMENTS>
+            </SENDER-RECEIVER-INTERFACE>
+            <SENDER-RECEIVER-INTERFACE>
+              <SHORT-NAME>StructArray_Interface</SHORT-NAME>
+              <DATA-ELEMENTS>
+                <VARIABLE-DATA-PROTOTYPE>
+                  <SHORT-NAME>Struct_Element</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Struct_t</TYPE-TREF>
+                </VARIABLE-DATA-PROTOTYPE>
+              </DATA-ELEMENTS>
+            </SENDER-RECEIVER-INTERFACE>
+            <SENDER-RECEIVER-INTERFACE>
+              <SHORT-NAME>Service_Interface</SHORT-NAME>
+              <DATA-ELEMENTS>
+                <VARIABLE-DATA-PROTOTYPE>
+                  <SHORT-NAME>Struct_Elem</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Struct_t</TYPE-TREF>
+                </VARIABLE-DATA-PROTOTYPE>
+                <VARIABLE-DATA-PROTOTYPE>
+                  <SHORT-NAME>Array_Elem</SHORT-NAME>
+                  <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Array_t</TYPE-TREF>
                 </VARIABLE-DATA-PROTOTYPE>
               </DATA-ELEMENTS>
             </SENDER-RECEIVER-INTERFACE>
             <CLIENT-SERVER-INTERFACE>
-              <SHORT-NAME>Client_Server_Interface</SHORT-NAME>
+              <SHORT-NAME>Switch_State</SHORT-NAME>
               <OPERATIONS>
                 <CLIENT-SERVER-OPERATION>
-                  <SHORT-NAME>Op1</SHORT-NAME>
+                  <SHORT-NAME>getSwitchState</SHORT-NAME>
                   <ARGUMENTS>
                     <ARGUMENT-DATA-PROTOTYPE>
-                      <SHORT-NAME>arg1</SHORT-NAME>
-                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Struct_1</TYPE-TREF>
+                      <SHORT-NAME>SwitchState</SHORT-NAME>
+                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/SwitchState_t</TYPE-TREF>
                       <DIRECTION>
                         <DIRECTION>output</DIRECTION>
-                      </DIRECTION>
-                    </ARGUMENT-DATA-PROTOTYPE>
-                    <ARGUMENT-DATA-PROTOTYPE>
-                      <SHORT-NAME>arg2</SHORT-NAME>
-                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Array_1</TYPE-TREF>
-                      <DIRECTION>
-                        <DIRECTION>input</DIRECTION>
-                      </DIRECTION>
-                    </ARGUMENT-DATA-PROTOTYPE>
-                    <ARGUMENT-DATA-PROTOTYPE>
-                      <SHORT-NAME>arg3</SHORT-NAME>
-                      <TYPE-TREF DEST="IMPLEMENTATION-DATA-TYPE">/Dimmer/ImplementationDataTypes/Value_1</TYPE-TREF>
-                      <DIRECTION>
-                        <DIRECTION>input</DIRECTION>
                       </DIRECTION>
                     </ARGUMENT-DATA-PROTOTYPE>
                   </ARGUMENTS>

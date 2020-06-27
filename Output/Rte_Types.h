@@ -3,13 +3,17 @@
 
 #include "Platform_Types.h"
 
-typedef sint8 Value_1;
+typedef boolean DoorStatus_t;
 
-typedef uint8 Array_1[10];
+typedef DoorStatus_t DimmerStatus_t;
+
+typedef DoorStatus_t SwitchState_t;
+
+typedef DoorStatus_t Array_t[5];
 
 typedef struct {
-     sint8  Int;
-     boolean  Bool;
-} Struct_1;
+     uint8  Element_1;
+     boolean  Element_2;
+} Struct_t;
 
 #endif

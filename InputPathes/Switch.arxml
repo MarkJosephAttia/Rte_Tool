@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AUTOSAR xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-3-0.xsd" xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>Dimmer</SHORT-NAME>
+      <ELEMENTS>
+        <APPLICATION-SW-COMPONENT-TYPE>
+          <COMPLEX-DEVICE-DRIVER-SW-COMPONENT-TYPE>
+            <SHORT-NAME>Switch</SHORT-NAME>
+            <PORTS>
+              <P-PORT-PROTOTYPE>
+                <SHORT-NAME>Switch_Port</SHORT-NAME>
+                <PROVIDED-COM-SPECS>
+                  <SERVER-COM-SPEC>
+                    <OPERATION-REF DEST="CLIENT-SERVER-OPERATION">/PortInterfaces/Switch_State/getSwitchState</OPERATION-REF>
+                  </SERVER-COM-SPEC>
+                </PROVIDED-COM-SPECS>
+                <PROVIDED-INTERFACE-TREF DEST="CLIENT-SERVER-INTERFACE">/PortInterfaces/Switch_State</PROVIDED-INTERFACE-TREF>
+              </P-PORT-PROTOTYPE>
+            </PORTS>
+            <INTERNAL-BEHAVIORS>
+              <SWC-INTERNAL-BEHAVIOR>
+                <SHORT-NAME>Switch_InternalBehavior</SHORT-NAME>
+                <Events>
+                  <INIT-EVENT>
+                    <SHORT-NAME>Switch_Init</SHORT-NAME>
+                    <START-ON-EVENT-REF DEST="RUNNABLE-ENTITY">/Dimmer/Switch/Switch_InternalBehavior/Switch_Runnable</START-ON-EVENT-REF>
+                  </INIT-EVENT>
+                </Events>
+                <RUNNABLES>
+                  <RUNNABLE-ENTITY>
+                    <SHORT-NAME>Switch_Runnable</SHORT-NAME>
+                    <CAN-BE-INVOKED-CONCURRENTLY>false</CAN-BE-INVOKED-CONCURRENTLY>
+                    <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                    <SYMBOL>Switch_Runnable</SYMBOL>
+                  </RUNNABLE-ENTITY>
+                </RUNNABLES>
+              </SWC-INTERNAL-BEHAVIOR>
+            </INTERNAL-BEHAVIORS>
+          </COMPLEX-DEVICE-DRIVER-SW-COMPONENT-TYPE>
+          <SWC-IMPLEMENTATION>
+            <SHORT-NAME>Switch_Implementation</SHORT-NAME>
+            <BEHAVIOR-REF DEST="SWC-INTERNAL-BEHAVIOR">/Dimmer/Switch/Switch_InternalBehavior</BEHAVIOR-REF>
+          </SWC-IMPLEMENTATION>
+        </APPLICATION-SW-COMPONENT-TYPE>
+      </ELEMENTS>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

@@ -1,9 +1,17 @@
 #ifndef RTE_H_
 #define RTE_H_
 
-extern Std_ReturnType Rte_Read_Door_To_Dimmer_Port_Array_Data_Element(Array_1 *data);
-extern Std_ReturnType Rte_Write_Dimmer_To_Light_Port_Struct_Data_Element(Struct_1 *data);
-extern Std_ReturnType Rte_Write_Door_To_Dimmer_Port_Array_Data_Element(Array_1 *data);
-extern Std_ReturnType Rte_Read_Dimmer_To_Light_Port_Struct_Data_Element(Struct_1 *data);
+extern Std_ReturnType Rte_Read_DoorContact_Port_DoorContact_Status(DoorStatus_t *data);
+extern Std_ReturnType Rte_Write_Dimmer_Port_Dimmer_Status(DimmerStatus_t data);
+extern Std_ReturnType Rte_Read_Left_Door_Port_DoorStatus(DoorStatus_t *data);
+extern Std_ReturnType Rte_Read_Right_Door_Port_DoorStatus(DoorStatus_t *data);
+extern Std_ReturnType Rte_Write_DoorContact_Port_DoorContact_Status(DoorStatus_t data);
+extern Std_ReturnType Rte_Write_Left_Door_Port_DoorStatus(DoorStatus_t data);
+extern Std_ReturnType Rte_Read_Dimmer_Port_Dimmer_Status(DimmerStatus_t *data);
+extern Std_ReturnType Rte_Write_Right_Door_Port_DoorStatus(DoorStatus_t data);
+extern Std_ReturnType Rte_Read_StructArray_SenderPort_Struct_Elem(Struct_t *data);
+extern Std_ReturnType Rte_Read_StructArray_SenderPort_Array_Elem(Array_t *data);
+extern Std_ReturnType Rte_Write_StructArray_SenderPort_Struct_Elem(Struct_t *data);
+extern Std_ReturnType Rte_Write_StructArray_SenderPort_Array_Elem(Array_t *data);
 
 #endif
