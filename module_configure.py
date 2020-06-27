@@ -6,6 +6,12 @@ from PyQt5.QtWidgets import *
 from PyQt5.Qt import *
 from PyQt5.QtGui import QFont, QColor, QIcon
 import copy
+from Elements.Elements import Element
+import functools
+from PyQt5.QtCore import pyqtSlot
+import sys
+# import module_window
+
 
 class StandardItem(QStandardItem):
     def __init__(self, txt='', font_size=12, set_bold=False, color=QColor(0, 0, 0)):
@@ -23,6 +29,16 @@ class moduleConfg(QMainWindow):
     switch_open_window = QtCore.pyqtSignal()
     projectName = ''
     windowFrame = Ui_MainWindow()
+
+    checkedModulesTree = None
+    rootNode = None
+    Application_Root = None
+    CDD_Root = None
+    Service_Root = None
+    BSW_Root = None
+    comboBox = None
+
+    portConnections = {}
 
     def __init__(self,toolName,toolIcon):
         super(moduleConfg, self).__init__()
@@ -96,33 +112,40 @@ class moduleConfg(QMainWindow):
         self.showMenuBar()
         self.showToolBar()
 
-    def treeOfCheckedModules(mainClass, SWC):
-        mainClass.checkedModulesTree = QStandardItemModel()
-        mainClass.rootNode = mainClass.checkedModulesTree.invisibleRootItem()
-        mainClass.Application_Root = StandardItem('Application Software Component', 10)
-        mainClass.CDD_Root = StandardItem('Complex Device Driver Software Component', 10)
-        mainClass.Service_Root = StandardItem('Service Software Component', 10)
-        mainClass.BSW_Root = StandardItem('BSW Functions', 10)
+    def treeOfCheckedModulesInit(self):
+        self.checkedModulesTree = QStandardItemModel()
+        self.rootNode = self.checkedModulesTree.invisibleRootItem()
+        self.Application_Root = StandardItem('Application Software Component', 10)
+        self.CDD_Root = StandardItem('Complex Device Driver Software Component', 10)
+        self.Service_Root = StandardItem('Service Software Component', 10)
+        self.BSW_Root = StandardItem('BSW Functions', 10)
 
+    def treeOfCheckedModules(self, SWC, key):
         for Module in SWC:
-            mainClass.treeChildren = StandardItem(Module, 10)
-            mainClass.Application_Root.appendRow(mainClass.treeChildren)
-            mainClass.PortSrandardItem = StandardItem('Ports', 8)
-            mainClass.P_PortSrandardItem = StandardItem('R Ports', 8)
-            mainClass.R_PortSrandardItem = StandardItem('P Ports', 8)
-            mainClass.RunnableSrandardItem = StandardItem('Runnables', 8)
-            mainClass.treeChildren.appendRow(mainClass.PortSrandardItem)
-            mainClass.treeChildren.appendRow(mainClass.RunnableSrandardItem)
-            mainClass.PortSrandardItem.appendRow(mainClass.R_PortSrandardItem)
-            mainClass.PortSrandardItem.appendRow(mainClass.P_PortSrandardItem)
+            self.treeChildren = StandardItem(Module, 10)
+            if key == 0:
+                self.Application_Root.appendRow(self.treeChildren)
+            elif key == 1:
+                self.CDD_Root.appendRow(self.treeChildren)
+            elif key == 2:
+                self.Service_Root.appendRow(self.treeChildren)
+
+            self.PortSrandardItem = StandardItem('Ports', 8)
+            self.P_PortSrandardItem = StandardItem('R Ports', 8)
+            self.R_PortSrandardItem = StandardItem('P Ports', 8)
+            self.RunnableSrandardItem = StandardItem('Runnables', 8)
+            self.treeChildren.appendRow(self.PortSrandardItem)
+            self.treeChildren.appendRow(self.RunnableSrandardItem)
+            self.PortSrandardItem.appendRow(self.R_PortSrandardItem)
+            self.PortSrandardItem.appendRow(self.P_PortSrandardItem)
 
         #set Tree root      
-        mainClass.rootNode.appendRow(mainClass.Application_Root)
-        mainClass.rootNode.appendRow(mainClass.CDD_Root)
-        mainClass.rootNode.appendRow(mainClass.Service_Root)
-        mainClass.rootNode.appendRow(mainClass.BSW_Root)
-        mainClass.windowFrame.checkedModulesView.setModel(mainClass.checkedModulesTree)
-        mainClass.windowFrame.checkedModulesView.expandAll()
+        self.rootNode.appendRow(self.Application_Root)
+        self.rootNode.appendRow(self.CDD_Root)
+        self.rootNode.appendRow(self.Service_Root)
+        self.rootNode.appendRow(self.BSW_Root)
+        self.windowFrame.checkedModulesView.setModel(self.checkedModulesTree)
+        self.windowFrame.checkedModulesView.expandAll()
 
     def showConfigurations(self):
         for i in reversed(range(self.parametersAndReferencesRows.count())):
@@ -132,6 +155,7 @@ class moduleConfg(QMainWindow):
                 for j in reversed(range(self.parametersAndReferencesRows.itemAt(i).layout().count())):
                     self.parametersAndReferencesRows.itemAt(i).layout().itemAt(j).widget().deleteLater()
                 self.parametersAndReferencesRows.removeItem(self.parametersAndReferencesRows.itemAt(i).layout())
+
         if self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'BSW Functions':
             for i in range(0,5):
                 layout = QHBoxLayout()
@@ -174,31 +198,111 @@ class moduleConfg(QMainWindow):
                 elif i == 4:
                     self.parametersAndReferencesRows.addRow("Can_MainFunction_Write", layout)
         elif self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'Runnables' :
-            comboBox = QComboBox()
-            comboBox.addItem("None")
-            comboBox.addItem("Runnable Settings 1")
-            comboBox.addItem("Runnable Settings 2")
-            self.parametersAndReferencesRows.addRow("Runnable 1", comboBox)
+            
+            Elements = Element()
+            Elements.update()
 
-            comboBox1 = QLineEdit()
-            self.parametersAndReferencesRows.addRow("Runnable 2", comboBox1)
-            #to read the user input
-            print(comboBox1.text())
-        elif self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'R Ports' or  self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'P Ports':
-            comboBox = QComboBox()
-            comboBox.addItem("None")
-            comboBox.addItem("Port Settings 1")
-            comboBox.addItem("Port Settings 2")
-            self.parametersAndReferencesRows.addRow("Port 1", comboBox)
+            for i in Elements.Application_SWC_Types:
+                if self.windowFrame.checkedModulesView.selectedIndexes()[0].parent().data(Qt.DisplayRole) == i.Name:
+                    for j in i.InternalBehavoirs:
+                        for k in j.Runnables:
+                            layoutRunnable = QHBoxLayout()
+                            taskCBox = QComboBox()
+                            taskCBox.addItem("None")
+                            
+                            posCBox = QSpinBox()
 
-            comboBox1 = QLineEdit()
-            self.parametersAndReferencesRows.addRow("Port 2", comboBox1)
-            #to read the user input
-            print(comboBox1.text())
+                            taskTypeSelectedLabel = QLabel()
+                            taskTypeSelectedLabel.setText("Basic")
+
+                            triggerSelectedLabel = QLabel()
+                            triggerSelectedLabel.setText("Init Event")
+
+                            priodData = QLabel()
+                            if triggerSelectedLabel.text() == 'Timing Event':
+                                priodData.setText("10")
+                            else:
+                                priodData.setText("None")
+
+                            taskLabel = QLabel()
+                            taskLabel.setText("Task")
+                            taskLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                            taskTypeLabel = QLabel()
+                            taskTypeLabel.setText("Type")
+                            taskTypeLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                            triggerLabel = QLabel()
+                            triggerLabel.setText("Trigger")
+                            triggerLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                            posLabel = QLabel()
+                            posLabel.setText("Position")
+                            posLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                            priodLabel = QLabel()
+                            priodLabel.setText("Priodicity")
+                            priodLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+                
+                            layoutRunnable.addWidget(taskLabel)
+                            layoutRunnable.addWidget(taskCBox)
+                            layoutRunnable.addWidget(posLabel)
+                            layoutRunnable.addWidget(posCBox)
+                            layoutRunnable.addWidget(taskTypeLabel)
+                            layoutRunnable.addWidget(taskTypeSelectedLabel)
+                            layoutRunnable.addWidget(triggerLabel)
+                            layoutRunnable.addWidget(triggerSelectedLabel)
+                            layoutRunnable.addWidget(priodLabel)
+                            layoutRunnable.addWidget(priodData)
+
+                            self.parametersAndReferencesRows.addRow(k.Name, layoutRunnable)
+
+        elif self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'R Ports':
+            Elements = Element()
+            Elements.update()
+        
+            for i in Elements.Application_SWC_Types:
+                if self.windowFrame.checkedModulesView.selectedIndexes()[0].parent().parent().data(Qt.DisplayRole) == i.Name:
+                    for a in i.Ports:
+                        self.comboBox = QComboBox()
+                        if a.Port_Type == 'R-Port':
+                            self.comboBox.addItem("None")
+                            for e in Elements.Application_SWC_Types:
+                                for p in e.Ports:
+                                    if  a.Interface_Type == 'Sender_Reciever_Interface' and p.Interface_Type == 'Sender_Reciever_Interface':
+                                        if Elements.Sender_Reciever_Port_Interfaces[a.Interface_ID].Name == Elements.Sender_Reciever_Port_Interfaces[p.Interface_ID].Name:
+                                            if p.Port_Type == 'P-Port':
+                                                self.comboBox.addItem(p.Name)
+                                    elif  a.Interface_Type == 'Client_Server_Interface' and p.Interface_Type == 'Client_Server_Interface':
+                                        if Elements.Client_Server_Port_Interfaces[a.Interface_ID].Name == Elements.Client_Server_Port_Interfaces[p.Interface_ID].Name:
+                                            if p.Port_Type == 'P-Port':
+                                                self.comboBox.addItem(p.Name)
+
+                            self.comboBox.setObjectName(a.Name)
+                            self.comboBox.currentIndexChanged.connect(functools.partial(self.SelectedIndex, a.Name))
+                            self.comboBox.setCurrentText(self.portConnections[a.Name])
+                            self.parametersAndReferencesRows.addRow(a.Name, self.comboBox)
+
+        elif self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'P Ports':
+            Elements = Element()
+            Elements.update()
+
+            for i in Elements.Application_SWC_Types:
+                if self.windowFrame.checkedModulesView.selectedIndexes()[0].parent().parent().data(Qt.DisplayRole) == i.Name:
+                    for a in i.Ports:
+                        self.comboBox = QComboBox()
+                        if a.Port_Type == 'P-Port':
+                            self.comboBox.addItem("None")
+                            self.parametersAndReferencesRows.addRow(a.Name, self.comboBox)
 
     def getValue(self, val):
         print(val.data())
         print(val.row())
+
+    def SelectedIndex(self,PortName):
+        print(PortName)
+        for i in reversed(range(self.parametersAndReferencesRows.count())):
+            if self.parametersAndReferencesRows.itemAt(i).widget() is not None:
+                if self.parametersAndReferencesRows.itemAt(i).widget().objectName() == PortName:
+                    print(self.parametersAndReferencesRows.itemAt(i).widget().currentText())
+                    self.portConnections[PortName] = self.parametersAndReferencesRows.itemAt(i).widget().currentText()
+
 
     def showMenuBar(self):
         #self.menuBar = QtWidgets.QMenuBar(self)

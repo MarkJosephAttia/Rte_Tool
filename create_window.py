@@ -7,6 +7,7 @@ from PyQt5.QtGui import *
 from images import *
 from PyQt5.QtWidgets import *
 import module_configure
+from Elements.Elements import Element 
 
 class createWindow(QtWidgets.QMdiSubWindow):
     switch_window = QtCore.pyqtSignal()
@@ -62,11 +63,11 @@ class createWindow(QtWidgets.QMdiSubWindow):
         self.dirButton.clicked.connect(self.changeFolder)
 
     def createName(self):
-        SWC = ['Left Door', 'Right Door', 'Door Contact', 'Dimmer', 'Light']
-        module_configure.moduleConfg.treeOfCheckedModules(module_configure.moduleConfg, SWC)
         self.name = self.nameTextBox.text()
         if self.name == "" or self.name == " ":
-            self.show_popup_name_error()
+            #self.show_popup_name_error()
+            #MARK#
+            self.switch_window.emit()
 
         elif self.dirFolder == "" or self.dirFolder == " ":
             self.show_popup_folder_error()

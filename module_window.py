@@ -7,6 +7,8 @@ from images import *
 from PyQt5.QtWidgets import *
 from Generators.Generator import C_Generator
 from InputPathes.InputPathes import Inputs
+import module_configure
+from Elements.Elements import Element 
 
 class moduleWindow(QtWidgets.QMdiSubWindow):
     switch_window = QtCore.pyqtSignal()
@@ -21,6 +23,7 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
         self.setWindowTitle(toolName)
         self.setWindowIcon(QtGui.QIcon(toolIcon))
         self.initui()
+        module_configure.moduleConfg.treeOfCheckedModulesInit(module_configure.moduleConfg)
 
     def initui(self):
         self.OSlabel = QtWidgets.QLabel(self)
@@ -115,11 +118,46 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
         self.swcsCheck = self.swcsTextBox.toPlainText()
         self.dataTypesCheck = self.dataTypesTextBox.toPlainText()
         self.switch_window.emit()
-        Inputs(["./InputPathes/First_SWC.arxml"])
-        print(self.dataTypesTextBox.toPlainText())
+        swcFiles = []
+        swcFiles = self.swcsTextBox.toPlainText().split()
+        print('Our List:       ')
+        print(swcFiles)
+        Inputs(swcFiles)
         Inputs.DataTypesAndInterfaces_filePath = self.dataTypesTextBox.toPlainText()
+        
+        App_SWC = []
+        Complex_Driver_SWC = []
+        Service_Software_SWC = []
+
+        Elements = Element()
+        Elements.update()
+
+        for i in Elements.Application_SWC_Types:
+            for j in i.Ports:
+                if j.Port_Type == 'R-Port':
+                    module_configure.moduleConfg.portConnections[j.Name] = 'None'
+        
+        for i in Elements.Application_SWC_Types:
+            if i.Type == 'Application SWC':
+                App_SWC.append(i.Name)
+            elif i.Type == 'Complex Device Driver SWC':
+                Complex_Driver_SWC.append(i.Name)
+            elif i.Type == 'Service SWC':
+                Service_Software_SWC.append(i.Name)
+            print("Typeeeee")
+            print(i.Type)
+        
+        module_configure.moduleConfg.treeOfCheckedModules(module_configure.moduleConfg, App_SWC, 0)
+        module_configure.moduleConfg.treeOfCheckedModules(module_configure.moduleConfg, Complex_Driver_SWC, 1)
+        module_configure.moduleConfg.treeOfCheckedModules(module_configure.moduleConfg, Service_Software_SWC, 2)
+
+
         self.generator = C_Generator()
         self.generator.Rte_h_Gen()
+        self.generator.Rte_runnable_Gen()
+        self.generator.Rte_port_Gen()
+        self.generator.Rte_Src_Gen()
+
         """if self.osCheck == "" or self.osCheck == " ":
             self.showPopupFileError('OS')
 
@@ -158,10 +196,11 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
             self.showPopupFileError('Os')
 
     def sellectSwCsFile(self):
-        self.filePath1 = QFileDialog.getOpenFileNames(self, 'choose file')
+        self.filePath1 = QFileDialog.getOpenFileNames(self, 'OpenFile')
+        #self.filePath1 = QFileDialog.getOpenFileNames(self, 'choose file')
         # self.swcsTextBox.setText(self.filePath1[0][0] + ' || ' + self.filePath1[0][1])
-        print(self.filePath1[0])
-        self.cutString(self.filePath1[0])
+        print(self.filePath1[0][0])
+        self.cutString(self.filePath1[0][0])
 
         # s.rfind
 
@@ -172,10 +211,11 @@ class moduleWindow(QtWidgets.QMdiSubWindow):
         msgRun = self.msg.exec_()
 
     def cutString(self, arr):
-        for as1 in arr:
-            indexch = as1.rfind('/')
-            print(as1[indexch + 1:])
-            self.swcsTextBox.appendPlainText(as1[indexch + 1:])
+        # for as1 in arr:
+        #     indexch = as1.rfind('/')
+        #     print(as1[indexch + 1:])
+        #     self.swcsTextBox.appendPlainText(as1[indexch + 1:])
+        self.swcsTextBox.appendPlainText(arr)
 
     def cutString1(self, arr):
         # for as1 in arr:
