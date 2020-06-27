@@ -140,7 +140,7 @@ class C_Generator:
                         if module_configure.moduleConfg.portConnections[j.Name] != 'None':
                             for dataElement in self.Elements.Sender_Reciever_Port_Interfaces[j.Interface_ID].Data_Elements:
                                 if self.Elements.Implementation_Data_Types[dataElement.Implementation_Type_ID].Category == 'VALUE':
-                                    rteFile.write('extern Std_ReturnType Rte_Read_' + module_configure.moduleConfg.portConnections[j.Name] + '_' + dataElement.Name + '(' +  self.Elements.Implementation_Data_Types[dataElement.Implementation_Type_ID].Name + ' *data);\n')
+                                    rteHeaderFile.write('extern Std_ReturnType Rte_Read_' + module_configure.moduleConfg.portConnections[j.Name] + '_' + dataElement.Name + '(' +  self.Elements.Implementation_Data_Types[dataElement.Implementation_Type_ID].Name + ' *data);\n')
                                     rteFile.write('Std_ReturnType Rte_Read_' + module_configure.moduleConfg.portConnections[j.Name] + '_' + dataElement.Name + '(' +  self.Elements.Implementation_Data_Types[dataElement.Implementation_Type_ID].Name + ' *data)\n{\n')
                                     rteFile.write('    *data = Rte_' + module_configure.moduleConfg.portConnections[j.Name] + '_' + dataElement.Name + ';\n    return E_OK;\n}\n')
                                 elif self.Elements.Implementation_Data_Types[dataElement.Implementation_Type_ID].Category == 'ARRAY':
