@@ -36,6 +36,7 @@ class moduleConfg(QMainWindow):
     CDD_Root = None
     Service_Root = None
     BSW_Root = None
+    comboBox = None
 
 
     def __init__(self,toolName,toolIcon):
@@ -254,22 +255,23 @@ class moduleConfg(QMainWindow):
             for i in Elements.Application_SWC_Types:
                 if self.windowFrame.checkedModulesView.selectedIndexes()[0].parent().parent().data(Qt.DisplayRole) == i.Name:
                     for a in i.Ports:
-                        comboBox = QComboBox()
+                        self.comboBox = QComboBox()
                         if a.Port_Type == 'R-Port':
-                            comboBox.addItem("None")
+                            self.comboBox.addItem("None")
                             for e in Elements.Application_SWC_Types:
                                 for p in e.Ports:
                                     if  a.Interface_Type == 'Sender_Reciever_Interface' and p.Interface_Type == 'Sender_Reciever_Interface':
                                         if Elements.Sender_Reciever_Port_Interfaces[a.Interface_ID].Name == Elements.Sender_Reciever_Port_Interfaces[p.Interface_ID].Name:
                                             if p.Port_Type == 'P-Port':
-                                                comboBox.addItem(p.Name)
+                                                self.comboBox.addItem(p.Name)
                                     elif  a.Interface_Type == 'Client_Server_Interface' and p.Interface_Type == 'Client_Server_Interface':
                                         if Elements.Client_Server_Port_Interfaces[a.Interface_ID].Name == Elements.Client_Server_Port_Interfaces[p.Interface_ID].Name:
                                             if p.Port_Type == 'P-Port':
-                                                comboBox.addItem(p.Name)
+                                                self.comboBox.addItem(p.Name)
 
-                            self.parametersAndReferencesRows.addRow(a.Name, comboBox)
-                            comboBox.currentIndexChanged.connect(lambda: self.SelectedIndex(a.Name,comboBox))
+                            self.parametersAndReferencesRows.addRow(a.Name, self.comboBox)
+                            print(a.Name)
+                            self.comboBox.currentIndexChanged.connect(functools.partial(self.SelectedIndex, a.Name))
 
         elif self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'P Ports':
             Elements = Element()
@@ -287,11 +289,9 @@ class moduleConfg(QMainWindow):
         print(val.data())
         print(val.row())
 
-    def SelectedIndex(self,PortName,PortComboBox):
-        print('Nameeeeeeee')
+    def SelectedIndex(self,PortName):
         print(PortName)
-        print('Maaaark')
-        print(PortComboBox.currentText())
+        print(self.comboBox.currentText())
 
     def showMenuBar(self):
         #self.menuBar = QtWidgets.QMenuBar(self)
