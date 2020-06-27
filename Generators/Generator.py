@@ -11,11 +11,7 @@ class C_Generator:
             os.mkdir('Output')
         except OSError:  
             None   
-<<<<<<< HEAD
         f = open("Output\Rte_Types.h", "w")
-=======
-        f = open("Output\Rtetypes.h", "w")
->>>>>>> 63cf684786f65a1fd6ee275008c328ce2e1ab2e6
         f.write('#ifndef RTE_H_\n')
         f.write('#define RTE_H_\n\n')
         f.write('#include "Platform_Types.h"\n')
@@ -32,7 +28,6 @@ class C_Generator:
                 f.write('} '+ i.Name + ';\n')
         f.write('\n#endif')
         f.close()
-<<<<<<< HEAD
     
     def Rte_runnable_Gen(self):
         try:
@@ -117,5 +112,3 @@ class C_Generator:
                             srcFile.write(')\n{\n\n}\n')
             srcFile.close()
             rteFile.close()
-=======
->>>>>>> 63cf684786f65a1fd6ee275008c328ce2e1ab2e6
