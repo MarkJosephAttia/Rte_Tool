@@ -7,6 +7,9 @@ from PyQt5.Qt import *
 from PyQt5.QtGui import QFont, QColor, QIcon
 import copy
 from Elements.Elements import Element
+import functools
+from PyQt5.QtCore import pyqtSlot
+import sys
 #import module_window
 
 
@@ -204,17 +207,14 @@ class moduleConfg(QMainWindow):
                             layoutRunnable = QHBoxLayout()
                             taskCBox = QComboBox()
                             taskCBox.addItem("None")
-                            posCBox = QComboBox()
-                            posCBox.addItem("None")
-                            taskTypeCBox = QComboBox()
-                            taskTypeCBox.addItem("Basic")
-                            taskTypeCBox.addItem("Extended")
-                            triggerCBox = QComboBox()
-                            triggerCBox.addItem("Init Event")
-                            triggerCBox.addItem("Timing Event")
-                            triggerCBox.addItem("On data receiption Event")
-                            triggerCBox.addItem("On operation envoked Event")
-                            triggerCBox.addItem("simple call")
+                            
+                            posCBox = QSpinBox()
+
+                            taskTypeSelectedLabel = QLabel()
+                            taskTypeSelectedLabel.setText("Basic")
+
+                            triggerSelectedLabel = QLabel()
+                            triggerSelectedLabel.setText("Init Event")
 
                             priodCBox = QSpinBox()
 
@@ -222,7 +222,7 @@ class moduleConfg(QMainWindow):
                             taskLabel.setText("Task")
                             taskLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
                             taskTypeLabel = QLabel()
-                            taskTypeLabel.setText("Task Type")
+                            taskTypeLabel.setText("Type")
                             taskTypeLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
                             triggerLabel = QLabel()
                             triggerLabel.setText("Trigger")
@@ -236,12 +236,12 @@ class moduleConfg(QMainWindow):
                 
                             layoutRunnable.addWidget(taskLabel)
                             layoutRunnable.addWidget(taskCBox)
-                            layoutRunnable.addWidget(taskTypeLabel)
-                            layoutRunnable.addWidget(taskTypeCBox)
-                            layoutRunnable.addWidget(triggerLabel)
-                            layoutRunnable.addWidget(triggerCBox)
                             layoutRunnable.addWidget(posLabel)
                             layoutRunnable.addWidget(posCBox)
+                            layoutRunnable.addWidget(taskTypeLabel)
+                            layoutRunnable.addWidget(taskTypeSelectedLabel)
+                            layoutRunnable.addWidget(triggerLabel)
+                            layoutRunnable.addWidget(triggerSelectedLabel)
                             layoutRunnable.addWidget(priodLabel)
                             layoutRunnable.addWidget(priodCBox)
 
@@ -250,19 +250,26 @@ class moduleConfg(QMainWindow):
         elif self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'R Ports':
             Elements = Element()
             Elements.update()
-
+        
             for i in Elements.Application_SWC_Types:
                 if self.windowFrame.checkedModulesView.selectedIndexes()[0].parent().parent().data(Qt.DisplayRole) == i.Name:
                     for a in i.Ports:
                         comboBox = QComboBox()
                         if a.Port_Type == 'R-Port':
+                            comboBox.addItem("None")
                             for e in Elements.Application_SWC_Types:
                                 for p in e.Ports:
-                                    print(p.Interface_ID)
-                                    if p.Interface_ID == a.Interface_ID:
-                                        if p.Port_Type == 'P-Port':
-                                            comboBox.addItem(p.Name)
+                                    if  a.Interface_Type == 'Sender_Reciever_Interface' and p.Interface_Type == 'Sender_Reciever_Interface':
+                                        if Elements.Sender_Reciever_Port_Interfaces[a.Interface_ID].Name == Elements.Sender_Reciever_Port_Interfaces[p.Interface_ID].Name:
+                                            if p.Port_Type == 'P-Port':
+                                                comboBox.addItem(p.Name)
+                                    elif  a.Interface_Type == 'Client_Server_Interface' and p.Interface_Type == 'Client_Server_Interface':
+                                        if Elements.Client_Server_Port_Interfaces[a.Interface_ID].Name == Elements.Client_Server_Port_Interfaces[p.Interface_ID].Name:
+                                            if p.Port_Type == 'P-Port':
+                                                comboBox.addItem(p.Name)
+
                             self.parametersAndReferencesRows.addRow(a.Name, comboBox)
+                            comboBox.currentIndexChanged.connect(lambda: self.SelectedIndex(a.Name,comboBox))
 
         elif self.windowFrame.checkedModulesView.selectedIndexes()[0].data(Qt.DisplayRole) == 'P Ports':
             Elements = Element()
@@ -279,6 +286,12 @@ class moduleConfg(QMainWindow):
     def getValue(self, val):
         print(val.data())
         print(val.row())
+
+    def SelectedIndex(self,PortName,PortComboBox):
+        print('Nameeeeeeee')
+        print(PortName)
+        print('Maaaark')
+        print(PortComboBox.currentText())
 
     def showMenuBar(self):
         #self.menuBar = QtWidgets.QMenuBar(self)
